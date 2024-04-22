@@ -50,7 +50,7 @@ const LandingPage = () => {
               </svg>
             </a>
             <a
-              href="/Patient-and-Health-Insurance-Management-System-Group20-Frontend1/register"
+              href="/register"
               class="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white border border-gray-700 rounded-lg hover:bg-gray-700 focus:ring-4 focus:ring-gray-800"
             >
               Register

@@ -33,12 +33,7 @@ function App() {
           <Router>
             <Routes>
               <Route path={starterRoute + "/"} element={<LandingPage />} />
-              <Route
-                path={
-                  "/Patient-and-Health-Insurance-Management-System-Group20-Frontend1/register"
-                }
-                element={<RegisterPage />}
-              />
+              <Route path={"/register"} element={<RegisterPage />} />
               <Route path={starterRoute + "/login"} element={<LoginPage />} />
               <Route
                 path={starterRoute + "/doctor/*"}
