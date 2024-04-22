@@ -1,0 +1,45 @@
+.package-details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #f8f9fa;
+}
+
+.package-details > div {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+    padding: 20px;
+    border-radius: 8px; 
+    background-color: #ffffff; 
+    max-width: 1000px; 
+    width: 100%; 
+    margin: 10px; 
+}
+
+.package-details p {
+    font-size: 16px; 
+    color: #333; 
+    line-height: 1.5; 
+    margin-bottom: 10px;
+}
+
+.package-details p:first-child {
+    font-size: 20px; 
+    font-weight: bold; 
+    color: #a52222; 
+}
+
+.package-details button {
+    padding: 10px 15px;
+    background-color: #a52222; 
+    color: white;
+    border: none;
+    border-radius: 5px; 
+    font-size: 16px; 
+    cursor: pointer; 
+    transition: background-color 0.2s;
+}
+
+.package-details button:hover {
+    background-color: #971010;
+}

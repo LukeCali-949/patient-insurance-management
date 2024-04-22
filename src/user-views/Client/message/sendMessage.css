@@ -1,0 +1,41 @@
+.send-message-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center horizontally */
+    margin-bottom: 20px;
+  }
+  
+  .send-message-form textarea {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+  }
+  
+  .send-message-form select {
+    width: 100%;
+    max-width: 400px; /* Adjust the maximum width as needed */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: white;
+    appearance: none;
+  }
+  
+  .send-message-form button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .send-message-form button:hover {
+    background-color: #0056b3;
+  }
+  

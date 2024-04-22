@@ -1,0 +1,27 @@
+.message-list {
+    margin: 20px;
+}
+
+.message-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.message-list li {
+    margin-bottom: 10px;
+}
+
+.message-list li div {
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.message-list li div strong {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.message-list li div p {
+    margin: 0;
+}

@@ -1,0 +1,63 @@
+.main-search {
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    padding: 20px;
+    background-color: #f5f5f5; 
+    align-items: center;
+  }
+  
+  .main-search h1 {
+    color: #005a9c; 
+    margin-bottom: 30px;
+    font-size: 2rem;
+  }
+  
+  .main-search-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px; 
+    flex-wrap: wrap; 
+  }
+  
+  .main-search-doctors-container,
+  .main-search-providers-container {
+    flex: 1;
+    min-width: 300px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+    overflow: hidden; 
+  }
+  
+  .main-search-doctors-container img,
+  .main-search-providers-container img {
+    width: 100%;
+    height: auto;
+    display: block; 
+  }
+  
+  .content {
+    padding: 20px;
+  }
+  
+  h2 {
+    color: #007bff; 
+    font-size: 1.8rem;
+  }
+  
+  p {
+    color: #666; 
+    line-height: 1.5; 
+  }
+  
+  .main-search-doctors-container button,
+  .main-search-providers-container button {
+    background-color: #591212;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px; 
+    transition: background-color 0.3s;
+  }

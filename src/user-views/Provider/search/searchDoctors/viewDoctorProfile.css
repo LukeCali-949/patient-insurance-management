@@ -1,0 +1,133 @@
+.profile-page {
+    margin: 0;
+    padding: 0;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f9f9f9;
+}
+
+.main-card {
+    margin: 40px;
+    padding: 20px;
+    display: flex;
+    width: 60vw;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+    border-radius: 10px;
+}
+
+.profile-description {
+    margin: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: rgb(229, 160, 160); 
+    width: 30vw;
+}
+
+.main-card button{
+    width: 200px;
+    height: 50px;
+    margin-top: 40px;
+    background-color: rgb(229, 160, 160);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);  
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.main-card button:hover{
+    background-color: rgb(238, 130, 130);
+}
+.details-container{
+    background-color: #fff;
+    width: 80vw;
+    border-radius: 15px;
+    padding: 20px;
+    margin: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+}
+.tab-titles{
+    display: flex;
+    justify-content: space-around; 
+    margin-bottom: 20px;
+}
+.tab-titles{
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+.tab-links{
+    padding-bottom: 5px;
+    font-size: 20px;
+    cursor:pointer;
+    color: black;
+    position: relative;
+}
+.tab-links::after{
+    content: '';
+    height: 2px;
+    width: 0;
+    background: rgb(147, 13, 44);
+    position: absolute;
+    left :0;
+    bottom:-2px;
+    transition: .5s;
+
+}
+.tab-links.active-link::after{
+    width: 50%;
+}
+.tab-contents{
+    display: inline;
+}
+.tab-contents ul li{
+    list-style: none;
+    padding: 8px 0; 
+    margin:10px 0;
+    color:  #333;
+}
+.tab-contents ul li span{
+    color:red;
+    font-size: 14px;
+}
+.tab-contents{
+    display: none;
+}
+.tab-contents.active-tab{
+    display: block;
+}
+
+.covid-modal {
+    width: 90%; 
+    max-width: 500px; 
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    background-color: #fff;
+}
+
+.covid-modal-actions button {
+    background-color: #007bff; 
+    color: white;
+}
+
+.covid-modal-actions button:first-child {
+    margin-right: 15px;
+}
+
+.covid-modal-actions button:hover {
+    opacity: 0.8;
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 998;
+}

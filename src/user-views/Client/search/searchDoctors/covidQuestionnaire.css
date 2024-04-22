@@ -1,0 +1,61 @@
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+}
+
+.covid-questionnaire {
+  max-width: 600px;
+  margin: 40px auto;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+}
+
+.covid-questionnaire p {
+  margin-bottom: 20px;
+  color: #333;
+  line-height: 1.5;
+}
+
+.covid-questionnaire label {
+  margin-right: 10px;
+  font-weight: 500;
+}
+
+.covid-questionnaire input[type="radio"] {
+  margin: 0 5px 0 0;
+}
+
+.covid-questionnaire textarea {
+  width: calc(100% - 20px);
+  height: 100px;
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.covid-questionnaire button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.covid-questionnaire button:hover {
+  background-color: #0056b3;
+}
+
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
