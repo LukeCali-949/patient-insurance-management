@@ -125,7 +125,10 @@ const SignupForm = () => {
           </h2>
           <p className="text-gray-600">
             Already have an account?{" "}
-            <a href="/login" className="text-[#747264] hover:underline">
+            <a
+              href="/Patient-and-Health-Insurance-Management-System-Group20-Frontend1/login"
+              className="text-[#747264] hover:underline"
+            >
               Login
             </a>
           </p>

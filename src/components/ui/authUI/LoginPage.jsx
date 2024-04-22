@@ -51,13 +51,19 @@ const LoginForm = () => {
 
       switch (userWithRole.role) {
         case "doctor":
-          navigate("/doctor");
+          navigate(
+            "/Patient-and-Health-Insurance-Management-System-Group20-Frontend1/doctor"
+          );
           break;
         case "patient":
-          navigate("/client");
+          navigate(
+            "/Patient-and-Health-Insurance-Management-System-Group20-Frontend1/client"
+          );
           break;
         case "insuranceProvider":
-          navigate("/provider");
+          navigate(
+            "/Patient-and-Health-Insurance-Management-System-Group20-Frontend1/provider"
+          );
           break;
       }
     } catch (error) {
