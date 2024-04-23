@@ -1,89 +1,147 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { db } from '../../../../firebase';
+import { collection, getDoc, where, query, addDoc, setDoc, doc, getDocs } from 'firebase/firestore';
+import { useAuth } from '../../../context/AuthContext';
 import './sendMessage.css';
+import { set } from 'firebase/database';
 
-const SendMessageForm = ({ onSendMessage }) => {
+const SendMessageForm = () => {
   const [message, setMessage] = useState('');
   const [doctors, setDoctors] = useState([]);
-  const [selectedDoctor, setSelectedDoctor] = useState('');
-  const [provider, setProvider] = useState([]);
-  const [selectedProvider, setSelectedProvider] = useState('');
-
+  const [Doctor, setDoctor] = useState('');
+  const [clients, setClients] = useState([]);
+  const [Client, setClient] = useState('');
+  const { user } = useAuth();
   useEffect(() => {
     fetchDoctors();
-    fetchProvider();
+    fetchClients();
   }, []);
 
   const fetchDoctors = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/doctor/');
-      setDoctors(response.data);
-      console.log('Doctors:', response.data);
+      const doctorsQuery = query(collection(db, 'users'), where('role', '==', 'doctor'));
+      const querySnapshot = await getDocs(doctorsQuery);
+      const fetchedDoctors = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        name: doc.data().username 
+      }));
+      setDoctors(fetchedDoctors);
     } catch (error) {
       console.error('Error fetching doctors:', error);
+    }
+  };
+  
+  const fetchClients = async () => {
+    try {
+      const clientsQuery = query(collection(db, 'users'), where('role', '==', 'patient'));
+      const querySnapshot = await getDocs(clientsQuery);
+      const fetchedClients = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        name: doc.data().username
+      }));
+      setClients(fetchedClients);
+    } catch (error) {
+      console.error('Error fetching clients:', error);
     }
   };
 
-  const fetchProvider = async () => {
+  const saveMessageToFirestore = async (message, Doctor, Provider, Client) => {
     try {
-      const response = await axios.get('http://localhost:8000/provider/');
-      setProvider(response.data);
-      console.log('provider:', response.data);
+        const currentTimestamp = new Date().toISOString();
+
+        const docRef = doc(db, 'messages', "messages");
+        const docSnap = await getDoc(docRef);
+        let existingMessages = docSnap.exists() ? docSnap.data().messages : [];
+        const senderref = await doc(db, 'users', Provider.uid);
+        const senderDoc = await getDoc(senderref);
+        const senderName = senderDoc.data().username;
+
+        const existingMessageIndex = existingMessages.findIndex(
+            (msg) => msg.Doctor === Doctor && msg.Client === Client
+        );
+
+        if (existingMessageIndex !== -1) {
+            existingMessages[existingMessageIndex].messages.push({ message, timestamp: currentTimestamp, sender: senderName});
+        } else {
+          
+            existingMessages.push({Doctor: Doctor, Provider: Provider, messages: [{ message, timestamp: currentTimestamp, sender: senderName }], Client: Client});
+        }
+        await setDoc(docRef, { messages: existingMessages });
+
+        console.log('Message saved to Firestore:', message, Doctor, Provider.uid, Client);
     } catch (error) {
-      console.error('Error fetching doctors:', error);
+        console.error('Error saving message to Firestore:', error);
+        throw error;
     }
-  };
+};
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!message || !selectedDoctor || !selectedProvider) return;
+    if (!message) return;
+    if (!Doctor && Client){
+      try {
+        await saveMessageToFirestore(message, null, user, Client);
+        setMessage('');
+        setDoctor('');
+        setClient('');
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
+    }
+    if (!Client && Doctor){
+      try {
+        await saveMessageToFirestore(message, Doctor, user, null);
+        setMessage('');
+        setDoctor('');
+        setClient('');
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
+    }
+    if (Doctor && Client){
     try {
-      const response = await axios.post(
-        'http://localhost:8000/message/',
-        { message, doctor: selectedDoctor, provider: selectedProvider},
-        {
-          withCredentials: true,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      console.log('Message sent:', message);
-      console.log('doctor:', selectedDoctor);
-      console.log('provider:', selectedProvider);
+      await saveMessageToFirestore(message, Doctor, user, Client);
       setMessage('');
+      setDoctor('');
+      setClient('');
     } catch (error) {
       console.error('Error sending message:', error);
     }
+  }
   };
+
+
 
   return (
     <form onSubmit={handleSubmit} className="send-message-form">
-      <textarea
+      <h3>Send a message</h3>
+      <input
+        type="text"
+        placeholder="Enter your message"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        placeholder="Type here"
-        rows={3}
       />
       <select
-        value={selectedDoctor}
-        onChange={(e) => setSelectedDoctor(e.target.value)}
+        value={Doctor}
+        onChange={(e) => setDoctor(e.target.value)}
       >
         <option value="">Select a doctor</option>
-        {doctors.map((doctor, index) => (
-          <option key={index} value={doctor.name}>
-            {doctor.name} - {doctor.specialty}
+        {doctors.map((doctor) => (
+          <option key={doctor.id} value={doctor.id}>
+            {doctor.name}
           </option>
         ))}
       </select>
       <select
-        value={selectedProvider}
-        onChange={(e) => setSelectedProvider(e.target.value)}
+        value={Client}
+        onChange={(e) => setClient(e.target.value)}
       >
-        <option value="">Select a provider</option>
-        {provider.map((provider, index) => (
-          <option key={index} value={provider.name}>
-            {provider.name}
+        <option value="">Select a client</option>
+        {clients.map((client) => (
+          <option key={client.id} value={client.id}>
+            {client.name}
           </option>
         ))}
       </select>

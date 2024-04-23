@@ -1,93 +1,187 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { db } from '../../../../firebase';
+import { collection, getDoc, where, query, addDoc, setDoc, doc, getDocs } from 'firebase/firestore';
+import { useAuth } from '../../../context/AuthContext';
 import './sendMessage.css';
+import { set } from 'firebase/database';
 
-const SendMessageForm = ({ onSendMessage }) => {
+const SendMessageForm = () => {
   const [message, setMessage] = useState('');
-  const [doctors, setDoctors] = useState([]);
-  const [selectedDoctor, setSelectedDoctor] = useState('');
-  const [provider, setProvider] = useState([]);
-  const [selectedProvider, setSelectedProvider] = useState('');
-
+  const [clients, setClients] = useState([]);
+  const [Client, setClient] = useState('');
+  const [providers, setProviders] = useState([]);
+  const [Provider, setProvider] = useState('');
+  const [sendToAllDoctors, setSendToAllDoctors] = useState(false);
+  const { user } = useAuth();
   useEffect(() => {
-    fetchDoctors();
-    fetchProvider();
+    fetchClients();
+    fetchProviders();
+    
   }, []);
 
-  const fetchDoctors = async () => {
+  const fetchClients = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/doctor/');
-      setDoctors(response.data);
-      console.log('Doctors:', response.data);
+      const clientsQuery = query(collection(db, 'users'), where('role', '==', 'patient'));
+      const querySnapshot = await getDocs(clientsQuery);
+      const fetchedClients = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        name: doc.data().username
+      }));
+      setClients(fetchedClients);
     } catch (error) {
-      console.error('Error fetching doctors:', error);
+      console.error('Error fetching clients:', error);
+    }
+  };
+  
+  const fetchProviders = async () => {
+    try {
+      const providersQuery = query(collection(db, 'users'), where('role', '==', 'insuranceProvider'));
+      const querySnapshot = await getDocs(providersQuery);
+      const fetchedProviders = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        name: doc.data().username 
+      }));
+      setProviders(fetchedProviders);
+    } catch (error) {
+      console.error('Error fetching providers:', error);
     }
   };
 
-  const fetchProvider = async () => {
+  const saveMessageToFirestore = async (message, user, Provider, Client) => {
     try {
-      const response = await axios.get('http://localhost:8000/provider/');
-      setProvider(response.data);
-      console.log('provider:', response.data);
+        const currentTimestamp = new Date().toISOString();
+
+        const docRef = doc(db, 'messages', "messages");
+        const docSnap = await getDoc(docRef);
+        let existingMessages = docSnap.exists() ? docSnap.data().messages : [];
+        const senderref = await doc(db, 'users', user.uid);
+        const senderDoc = await getDoc(senderref);
+        const senderName = senderDoc.data().username;
+
+        const existingMessageIndex = existingMessages.findIndex(
+            (msg) => msg.Client === Client && msg.Provider === Provider
+        );
+
+        if (existingMessageIndex !== -1) {
+            existingMessages[existingMessageIndex].messages.push({ message, timestamp: currentTimestamp, sender: senderName});
+        } else {
+          
+            existingMessages.push({Client: Client, Provider, messages: [{ message, timestamp: currentTimestamp, sender: senderName }], Doctor: user.uid});
+        }
+        await setDoc(docRef, { messages: existingMessages });
+
+        console.log('Message saved to Firestore:', message, Client, Provider, user.uid);
     } catch (error) {
-      console.error('Error fetching doctors:', error);
+        console.error('Error saving message to Firestore:', error);
+        throw error;
     }
-  };
+};
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!message || !selectedDoctor || !selectedProvider) return;
+    if (!message) return;
+    if (!Client && Provider){
+      try {
+        await saveMessageToFirestore(message, user, Provider, null);
+        setMessage('');
+        setClient('');
+        setProvider('');
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
+    }
+    if (!Provider && Client){
+      try {
+        await saveMessageToFirestore(message, user, null, Client);
+        setMessage('');
+        setClient('');
+        setProvider('');
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
+    }
+    if (Client && Provider){
     try {
-      const response = await axios.post(
-        'http://localhost:8000/message/',
-        { message, doctor: selectedDoctor, provider: selectedProvider},
-        {
-          withCredentials: true,
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-      console.log('Message sent:', message);
-      console.log('doctor:', selectedDoctor);
-      console.log('provider:', selectedProvider);
+      await saveMessageToFirestore(message, user, Provider, Client);
       setMessage('');
+      setClient('');
+      setProvider('');
     } catch (error) {
       console.error('Error sending message:', error);
     }
-  };
+  }
+    if (sendToAllDoctors) {
+      console.log('Sending message to all doctors:');
+      try{
+        const docRef = doc(db, 'messages', "messages");
+        const docSnap = await getDoc(docRef);
+        let existingMessages = docSnap.exists() ? docSnap.data().messages : [];
+        const senderref = await doc(db, 'users', user.uid);
+        const senderDoc = await getDoc(senderref);
+        const senderName = senderDoc.data().username;
+        const currentTimestamp = new Date().toISOString();
+        const existingMessageIndex = existingMessages.findIndex(
+          (msg) => msg.Doctor === "toAllDoctors"
+      );
+      if (existingMessageIndex !== -1) {
+        existingMessages[existingMessageIndex].messages.push({ message, timestamp: currentTimestamp, sender: senderName});
+      
+      }else{
+        existingMessages.push({Doctor: "toAllDoctors", messages: [{ message, timestamp: currentTimestamp, sender: senderName }]});
+      }
+      await setDoc(docRef, { messages: existingMessages });
+      console.log('Message saved to Firestore:', message, Client, Provider, user.uid);
+    }catch (error) {
+        console.error('Error sending message to all doctors:', error);
+    }
+    setMessage('');
+    setSendToAllDoctors(false);
+  }
+};
+
+
 
   return (
     <form onSubmit={handleSubmit} className="send-message-form">
-      <textarea
+      <h3>Send a message</h3>
+      <input
+        type="text"
+        placeholder="Enter your message"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        placeholder="Type here"
-        rows={3}
       />
       <select
-        value={selectedDoctor}
-        onChange={(e) => setSelectedDoctor(e.target.value)}
+        value={Client}
+        onChange={(e) => setClient(e.target.value)}
       >
-        <option value="">Select a doctor</option>
-        {doctors.map((doctor, index) => (
-          <option key={index} value={doctor.name}>
-            {doctor.name} - {doctor.specialty}
+        <option value="">Select a patient</option>
+        {clients.map((client) => (
+          <option key={client.id} value={client.id}>
+            {client.name}
           </option>
         ))}
       </select>
       <select
-        value={selectedProvider}
-        onChange={(e) => setSelectedProvider(e.target.value)}
+        value={Provider}
+        onChange={(e) => setProvider(e.target.value)}
       >
         <option value="">Select a provider</option>
-        {provider.map((provider, index) => (
-          <option key={index} value={provider.name}>
+        {providers.map((provider) => (
+          <option key={provider.id} value={provider.id}>
             {provider.name}
           </option>
         ))}
       </select>
-
+      <label className="checkbox">
+        <input
+          type="checkbox"
+          checked={sendToAllDoctors}
+          onChange={(e) => setSendToAllDoctors(e.target.checked)}
+        />
+        Send to all doctors
+      </label>
       <button type="submit">Send</button>
     </form>
   );
