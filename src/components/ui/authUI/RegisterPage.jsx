@@ -77,6 +77,10 @@ const SignupForm = () => {
     }
   };
 
+  const handleNavigate = () => {
+    navigate("/login");
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
       <div className="max-w-md w-full bg-white p-8 border border-gray-300 rounded-lg">
@@ -89,7 +93,10 @@ const SignupForm = () => {
           </h2>
           <p className="text-gray-600">
             Already have an account?{" "}
-            <a href="/login" className="text-[#747264] hover:underline">
+            <a
+              onClick={handleNavigate}
+              className="text-[#747264] hover:underline hover:cursor-pointer"
+            >
               Login
             </a>
           </p>

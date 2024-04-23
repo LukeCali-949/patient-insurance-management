@@ -67,6 +67,10 @@ const LoginForm = () => {
     }
   };
 
+  const handleNavigate = () => {
+    navigate("/register");
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
       <div className="max-w-md w-full bg-white p-8 border border-gray-300 rounded-lg">
@@ -79,7 +83,10 @@ const LoginForm = () => {
           </h2>
           <p className="text-gray-600">
             Need to make an account?{" "}
-            <a href="/register" className="text-[#747264] hover:underline">
+            <a
+              onClick={handleNavigate}
+              className="text-[#747264] hover:underline hover:cursor-pointer"
+            >
               Register
             </a>
           </p>
