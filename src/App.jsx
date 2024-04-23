@@ -22,6 +22,15 @@ import ProviderProfile from "./user-views/Client/search/searchPlans/ProviderProf
 import ViewInsurancePlans from "./user-views/Client/search/searchPlans/ViewInsurancePlans";
 import UserDetails from "./components/ui/Profile/UserDetails";
 
+import PlanSelection from "../src/vinaycomponents/PlanSelection";
+import BillingPage from "../src/vinaycomponents/BillingPage";
+import CheckoutPage from "../src/vinaycomponents/CheckoutPage";
+import ConfirmationPage from "../src/vinaycomponents/ConfirmationPage";
+import InsuranceProvider from "../src/vinaycomponents/InsuranceProvider";
+import ProviderDetails from "../src/vinaycomponents/ProviderDetails";
+import ProviderList from "../src/vinaycomponents/ProviderList";
+import GuestPaymentPage from "../src/vinaycomponents/GuestPaymentPage";
+
 function App() {
   const starterRoute =
     "/Patient-and-Health-Insurance-Management-System-Group20-Frontend1";
@@ -71,6 +80,16 @@ function App() {
                 element={<ViewInsurancePlans />}
               ></Route>
               <Route path="/profile-details" element={<UserDetails />}></Route>
+              <Route path="/billing1" element={<ProviderList />} />
+              <Route
+                path="/providers/:providerId"
+                element={<InsuranceProvider />}
+              />
+              <Route path="/plans" element={<PlanSelection />} />
+              <Route path="/billing" element={<BillingPage />} />
+              <Route path="/guest-payment" element={<GuestPaymentPage />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/confirmation" element={<ConfirmationPage />} />
               <Route path="*" element={<LandingPage />} />
             </Routes>
           </Router>

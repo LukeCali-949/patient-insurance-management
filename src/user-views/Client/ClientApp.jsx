@@ -11,6 +11,7 @@ import { db } from "../../../firebase.js";
 import { doc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import MainSearch from "./search/MainSearch.jsx";
+import PlanSelection from "../../vinaycomponents/PlanSelection.jsx";
 
 function Home() {
   return (
@@ -128,6 +129,9 @@ function ClientApp() {
                 <li>
                   <Link to="search">Search</Link>
                 </li>
+                <li>
+                  <Link to="plans">Insurance Plans</Link>
+                </li>
               </ul>
             </nav>
 
@@ -176,6 +180,7 @@ function ClientApp() {
             <Route path="message" element={<Message />} />
             <Route path="chatbot" element={<Chatbot />} />
             <Route path="search" element={<Search />} />
+            <Route path="plans" element={<PlanSelection />} />
           </Routes>
         </div>
       </section>
