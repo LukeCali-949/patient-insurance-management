@@ -48,7 +48,7 @@ const SignupForm = () => {
     }
 
     const actionCodeSettings = {
-      url: `http://localhost:5173/${formData.role}`, // URL to redirect back to after email verification
+      url: `https://patient-insurance-management.vercel.app/${formData.role}`, // URL to redirect back to after email verification
       handleCodeInApp: true, // This must be true to handle the sign-in link in the app
     };
 

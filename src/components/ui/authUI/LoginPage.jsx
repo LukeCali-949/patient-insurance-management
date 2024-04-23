@@ -69,7 +69,7 @@ const LoginForm = () => {
       }
 
       const actionCodeSettings = {
-        url: `http://localhost:5173/${role}`,
+        url: `https://patient-insurance-management.vercel.app/${role}`,
         handleCodeInApp: true,
       };
 
@@ -116,7 +116,7 @@ const LoginForm = () => {
             Need to make an account?{" "}
             <a
               onClick={handleRegisterClick}
-              className="text-[#747264] hover:underline"
+              className="text-[#747264] hover:underline hover:cursor-pointer"
             >
               Register
             </a>
