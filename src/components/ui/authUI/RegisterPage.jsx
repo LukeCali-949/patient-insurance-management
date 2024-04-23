@@ -11,7 +11,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { useAuth } from "../../../context/AuthContext";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-const SignupForm = ({ setClickedRegister }) => {
+const SignupForm = () => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { registerUser } = useAuth();
@@ -80,6 +80,10 @@ const SignupForm = ({ setClickedRegister }) => {
     }
   };
 
+  const handleClick = () => {
+    navigate("/login");
+  };
+
   // const handleSubmit = async (e) => {
   //   e.preventDefault();
   //   if (formData.password !== formData.confirmPassword) {
@@ -135,7 +139,7 @@ const SignupForm = ({ setClickedRegister }) => {
           <p className="text-gray-600">
             Already have an account?{" "}
             <a
-              onClick={() => setClickedRegister(false)}
+              onClick={handleClick}
               className="text-[#747264] hover:underline hover:cursor-pointer"
             >
               Login

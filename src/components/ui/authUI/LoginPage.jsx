@@ -10,7 +10,6 @@ import { auth } from "../../../../firebase";
 //import { collection } from "firebase/firestore";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db, getStorageRef } from "../../../../firebase";
-import RegisterPage from "./RegisterPage";
 
 const LoginForm = () => {
   const { signIn, resetPassword } = useAuth();
@@ -44,7 +43,7 @@ const LoginForm = () => {
   };
 
   const handleRegisterClick = () => {
-    setClickedRegister(true);
+    navigate("/register");
   };
 
   const handleSubmit = async (e) => {
@@ -103,7 +102,7 @@ const LoginForm = () => {
     }
   };
 
-  return !clickedRegister ? (
+  return (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
       <div className="max-w-md w-full bg-white p-8 border border-gray-300 rounded-lg">
         <div className="mb-6 text-center">
@@ -117,7 +116,7 @@ const LoginForm = () => {
             Need to make an account?{" "}
             <a
               onClick={handleRegisterClick}
-              className="text-[#747264] hover:underline hover:cursor-pointer"
+              className="text-[#747264] hover:underline"
             >
               Register
             </a>
@@ -165,8 +164,6 @@ const LoginForm = () => {
         </form>
       </div>
     </div>
-  ) : (
-    <RegisterPage setClickedRegister={setClickedRegister} />
   );
 };
 
