@@ -14,9 +14,7 @@ export function ImagesSliderDemo() {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(
-      "/Patient-and-Health-Insurance-Management-System-Group20-Frontend1/login"
-    );
+    navigate("/login");
   };
   return (
     <ImagesSlider className="h-[50rem]" images={images}>

@@ -89,9 +89,14 @@ function DoctorApp() {
     const handleSignInWithEmailLink = async () => {
       // Check if the URL is a sign-in with email link.
       let email = window.localStorage.getItem("emailForSignIn");
-      let username = window.localStorage.getItem("username");
-      let role = window.localStorage.getItem("role");
-      let photoURL = window.localStorage.getItem("photoURL");
+      let username;
+      let role;
+      let photoURL;
+      if (true) {
+        username = window.localStorage.getItem("username");
+        role = window.localStorage.getItem("role");
+        photoURL = window.localStorage.getItem("photoURL");
+      }
       if (isSignInWithEmailLink(auth, window.location.href)) {
         if (!email) {
           email = window.prompt("Please provide your email for confirmation");
@@ -106,24 +111,26 @@ function DoctorApp() {
 
           const user = result.user;
 
-          const userDocRef = doc(db, "users", user.uid);
-          await setDoc(userDocRef, {
-            email: user.email,
-            username: username,
-            lastSignIn: serverTimestamp(),
-            role: role,
-            theme: "default",
-            photoURL: photoURL,
-          });
+          if (true) {
+            const userDocRef = doc(db, "users", user.uid);
+            await setDoc(userDocRef, {
+              email: user.email,
+              username: username,
+              lastSignIn: serverTimestamp(),
+              role: role,
+              theme: "default",
+              photoURL: photoURL,
+            });
 
-          const roleDocRef = doc(db, role, user.uid);
-          await setDoc(roleDocRef, {
-            email: user.email,
-            username: username,
-            // role: role,
-            // theme: "default",
-            photoURL: photoURL,
-          });
+            const roleDocRef = doc(db, role, user.uid);
+            await setDoc(roleDocRef, {
+              email: user.email,
+              username: username,
+              // role: role,
+              // theme: "default",
+              photoURL: photoURL,
+            });
+          }
 
           window.localStorage.removeItem("emailForSignIn"); // Clear the email from localStorage
 
@@ -138,14 +145,17 @@ function DoctorApp() {
         }
       } else {
         const userDocRef = doc(db, "users", user.uid);
-        await setDoc(userDocRef, {
-          email: user.email,
-          username: username,
-          lastSignIn: serverTimestamp(),
-          role: role,
-          theme: "default",
-          photoURL: photoURL,
-        });
+
+        if (true) {
+          await setDoc(userDocRef, {
+            email: user.email,
+            username: username,
+            lastSignIn: serverTimestamp(),
+            role: role,
+            theme: "default",
+            photoURL: photoURL,
+          });
+        }
       }
     };
 

@@ -5,6 +5,11 @@ import { useAuth } from "../../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 import CaptchaTest from "./CaptchaTest";
+import { sendSignInLinkToEmail } from "firebase/auth";
+import { auth } from "../../../../firebase";
+//import { collection } from "firebase/firestore";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db, getStorageRef } from "../../../../firebase";
 
 const LoginForm = () => {
   const { signIn, resetPassword } = useAuth();
@@ -46,26 +51,44 @@ const LoginForm = () => {
     }
 
     try {
-      const userWithRole = await signIn(formData.email, formData.password);
-      enqueueSnackbar("Successfully signed in!", { variant: "success" });
+      //const userWithRole = await signIn(formData.email, formData.password);
 
-      switch (userWithRole.role) {
-        case "doctor":
-          navigate(
-            "/Patient-and-Health-Insurance-Management-System-Group20-Frontend1/doctor"
-          );
-          break;
-        case "patient":
-          navigate(
-            "/Patient-and-Health-Insurance-Management-System-Group20-Frontend1/client"
-          );
-          break;
-        case "insuranceProvider":
-          navigate(
-            "/Patient-and-Health-Insurance-Management-System-Group20-Frontend1/provider"
-          );
-          break;
+      const { role, password } = await fetchRoleByEmail(formData.email);
+
+      if (password !== formData.password) {
+        enqueueSnackbar(`Incorrect password`, {
+          variant: "error",
+        });
+        return;
       }
+
+      const actionCodeSettings = {
+        url: `http://localhost:5173/${role}`,
+        handleCodeInApp: true,
+      };
+
+      await sendSignInLinkToEmail(auth, formData.email, actionCodeSettings);
+      enqueueSnackbar("Email Sent!", { variant: "success" });
+      window.localStorage.setItem("emailForSignIn", formData.email);
+      window.localStorage.setItem("cameFromLogin", true);
+
+      // switch (userWithRole.role) {
+      //   case "doctor":
+      //     navigate(
+      //       "/Patient-and-Health-Insurance-Management-System-Group20-Frontend1/doctor"
+      //     );
+      //     break;
+      //   case "patient":
+      //     navigate(
+      //       "/Patient-and-Health-Insurance-Management-System-Group20-Frontend1/client"
+      //     );
+      //     break;
+      //   case "insuranceProvider":
+      //     navigate(
+      //       "/Patient-and-Health-Insurance-Management-System-Group20-Frontend1/provider"
+      //     );
+      //     break;
+      // }
     } catch (error) {
       enqueueSnackbar(`Failed to sign in: ${error.message}`, {
         variant: "error",
@@ -133,6 +156,32 @@ const LoginForm = () => {
       </div>
     </div>
   );
+};
+
+const fetchRoleByEmail = async (email) => {
+  try {
+    // Create a query to find the document with the specified email
+    const passwordsCollection = collection(db, "roles");
+    const emailQuery = query(passwordsCollection, where("email", "==", email));
+
+    // Execute the query and get the documents
+    const querySnapshot = await getDocs(emailQuery);
+
+    if (!querySnapshot.empty) {
+      // Get the first document that matches the query
+      const doc = querySnapshot.docs[0];
+      const passwordData = doc.data();
+      const roleValue = passwordData.role;
+      const passwordValue = passwordData.password;
+
+      return { role: roleValue, password: passwordValue };
+    } else {
+      throw new Error("No role found for this email.");
+    }
+  } catch (error) {
+    console.error("Error fetching role:", error);
+    throw error; // Propagate the error for further handling
+  }
 };
 
 export default LoginForm;

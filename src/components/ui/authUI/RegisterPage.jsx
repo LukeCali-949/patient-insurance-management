@@ -48,17 +48,26 @@ const SignupForm = () => {
     }
 
     const actionCodeSettings = {
-      url: "http://localhost:5173/Patient-and-Health-Insurance-Management-System-Group20-Frontend1/doctor", // URL to redirect back to after email verification
+      url: `http://localhost:5173/${formData.role}`, // URL to redirect back to after email verification
       handleCodeInApp: true, // This must be true to handle the sign-in link in the app
     };
 
     try {
       setError(null);
-      await sendSignInLinkToEmail(auth, formData.email, actionCodeSettings);
       window.localStorage.setItem("emailForSignIn", formData.email);
       window.localStorage.setItem("photoURL", photoURL);
       window.localStorage.setItem("username", formData.username);
       window.localStorage.setItem("role", formData.role);
+      window.localStorage.setItem("cameFromLogin", false);
+
+      const roleDocRef = doc(db, "roles", formData.email);
+      await setDoc(roleDocRef, {
+        email: formData.email,
+        role: formData.role,
+        password: formData.password,
+      });
+
+      await sendSignInLinkToEmail(auth, formData.email, actionCodeSettings);
 
       enqueueSnackbar("Check your email for the sign-in link", {
         variant: "success",
@@ -125,10 +134,7 @@ const SignupForm = () => {
           </h2>
           <p className="text-gray-600">
             Already have an account?{" "}
-            <a
-              href="/Patient-and-Health-Insurance-Management-System-Group20-Frontend1/login"
-              className="text-[#747264] hover:underline"
-            >
+            <a href="/login" className="text-[#747264] hover:underline">
               Login
             </a>
           </p>

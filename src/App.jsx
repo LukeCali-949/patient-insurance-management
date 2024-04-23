@@ -32,21 +32,12 @@ function App() {
         <SnackbarProvider>
           <Router>
             <Routes>
-              <Route path={starterRoute + "/"} element={<LandingPage />} />
-              <Route path={"/register"} element={<RegisterPage />} />
-              <Route path={starterRoute + "/login"} element={<LoginPage />} />
-              <Route
-                path={starterRoute + "/doctor/*"}
-                element={<DoctorApp />}
-              />
-              <Route
-                path={starterRoute + "/client/*"}
-                element={<ClientApp />}
-              />
-              <Route
-                path={starterRoute + "/provider/*"}
-                element={<ProviderApp />}
-              ></Route>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/doctor/*" element={<DoctorApp />} />
+              <Route path="/client/*" element={<ClientApp />} />
+              <Route path="/provider/*" element={<ProviderApp />}></Route>
               <Route path="/search-doctor" element={<SearchDoctor />} />
               <Route path="/search-provider" element={<SearchProvider />} />
               <Route

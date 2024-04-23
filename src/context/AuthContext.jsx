@@ -5,6 +5,7 @@ import {
   onAuthStateChanged,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
+  sendSignInLinkToEmail,
 } from "firebase/auth";
 import { auth, db } from "../../firebase";
 import {
@@ -64,7 +65,7 @@ export const AuthContextProvider = ({ children }) => {
         photoURL: photoURL,
       });
 
-      const roleDocRef = doc(db,role, user.uid)
+      const roleDocRef = doc(db, role, user.uid);
       await setDoc(roleDocRef, {
         email: user.email,
         username: username,
