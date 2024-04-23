@@ -10,12 +10,15 @@ import { auth } from "../../../../firebase";
 //import { collection } from "firebase/firestore";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { db, getStorageRef } from "../../../../firebase";
+import RegisterPage from "./RegisterPage";
 
 const LoginForm = () => {
   const { signIn, resetPassword } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const [userCaptcha, setUserCaptcha] = useState("");
   const navigate = useNavigate();
+
+  const [clickedRegister, setClickedRegister] = useState(false);
 
   const [formData, setFormData] = useState({
     email: "",
@@ -38,6 +41,10 @@ const LoginForm = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleRegisterClick = () => {
+    setClickedRegister(true);
   };
 
   const handleSubmit = async (e) => {
@@ -96,7 +103,7 @@ const LoginForm = () => {
     }
   };
 
-  return (
+  return !clickedRegister ? (
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
       <div className="max-w-md w-full bg-white p-8 border border-gray-300 rounded-lg">
         <div className="mb-6 text-center">
@@ -108,7 +115,10 @@ const LoginForm = () => {
           </h2>
           <p className="text-gray-600">
             Need to make an account?{" "}
-            <a href="/register" className="text-[#747264] hover:underline">
+            <a
+              onClick={handleRegisterClick}
+              className="text-[#747264] hover:underline hover:cursor-pointer"
+            >
               Register
             </a>
           </p>
@@ -155,6 +165,8 @@ const LoginForm = () => {
         </form>
       </div>
     </div>
+  ) : (
+    <RegisterPage />
   );
 };
 
