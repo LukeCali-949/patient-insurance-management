@@ -8,7 +8,7 @@ function ViewProviderProfile(){
 
     const profileDetails = async () => {
         try { 
-          const response = await axios.post('http://localhost:8000/profile_details/', { provider });
+          const response = await axios.post('https://patient-health-insurance-management-jrrw.onrender.com/profile_details/', { provider });
         } catch (error) {
           console.error('Error:', error);
         }

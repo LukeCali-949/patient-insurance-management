@@ -24,7 +24,7 @@ function CovidQuestionnaire(){
         event.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:8000/covid-questionnaire/', {
+            const response = await fetch('https://patient-health-insurance-management-jrrw.onrender.com/covid-questionnaire/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

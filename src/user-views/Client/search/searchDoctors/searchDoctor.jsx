@@ -12,7 +12,7 @@ function SearchDoctor() {
 
   const handleSearch = async () => {
     try { 
-      const response = await axios.post('http://localhost:8000/search_doctor/', { searchValue });
+      const response = await axios.post('https://patient-health-insurance-management-jrrw.onrender.com/search_doctor/', { searchValue });
       navigate('/search-doctor-results', { state: { results: response?.data} });
     } catch (error) {
       console.error('Error:', error);
@@ -21,15 +21,15 @@ function SearchDoctor() {
 
   const handleAllSearch = async () => {
     try {
-      const response = await axios.post('http://localhost:8000/view_all_doctors/', { searchAll});
+      const response = await axios.post('https://patient-health-insurance-management-jrrw.onrender.com/view_all_doctors/', { searchAll});
       navigate('/view-all-doctors', { state: { results: response?.data } });
     } catch (error) {
       console.error('Error:', error);
-    }
+    } 
   };
   const handleCovidSupportSearch = async() => {
     try {
-      const response = await axios.post('http://localhost:8000/view_all_doctors/', { searchCovidSupport});
+      const response = await axios.post('https://patient-health-insurance-management-jrrw.onrender.com/view_all_doctors/', { searchCovidSupport});
       const covidSupportData = response?.data.filter(doctor => doctor.covidSupport);
       navigate('/search-doctor-results', { state: { results: covidSupportData } });
     } catch (error) {
@@ -38,7 +38,7 @@ function SearchDoctor() {
   }
   const handleSpecialtySearch = async() => {
     try {
-      const response = await axios.post('http://localhost:8000/search_by_specialization/', { searchSpecialty });
+      const response = await axios.post('https://patient-health-insurance-management-jrrw.onrender.com/search_by_specialization/', { searchSpecialty });
       navigate('/search-doctor-results', { state: { results: response?.data } });
     } catch (error) {
       console.error('Error:', error);

@@ -12,7 +12,7 @@ function ProviderProfile({ provider }) {
     const handlePackages = async() =>{
         try { 
             console.log("provider.name...",provider.name);
-            const response = await axios.post('http://localhost:8000/view_all_packages/', { providerName: provider.name });
+            const response = await axios.post('https://patient-health-insurance-management-jrrw.onrender.com/view_all_packages/', { providerName: provider.name });
             navigate('/view-insurance-plans', { state: { insurancePlans: response?.data, providerName: provider.name} });
           } catch (error) {
             console.error('Error:', error);

@@ -11,7 +11,7 @@ function SearchProvider() {
 
   const handleSearch = async () => {
     try { 
-      const response = await axios.post('http://localhost:8000/search_provider/', { searchValue });
+      const response = await axios.post('https://patient-health-insurance-management-jrrw.onrender.com/search_provider/', { searchValue });
       console.log("response...",response?.data);
       navigate('/search-provider-results', { state: { results: response?.data} });
       setProviders(response?.data);
@@ -21,7 +21,7 @@ function SearchProvider() {
   };
   const viewProviderProfile = async() => {
     try{
-        const response = await axios.post('http://localhost:8000/view_all_providers/', { searchValue });
+        const response = await axios.post('https://patient-health-insurance-management-jrrw.onrender.com/view_all_providers/', { searchValue });
         navigate('/view-provider-profile', { state: { results: response?.data } });
     }
     catch(error){

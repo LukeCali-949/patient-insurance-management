@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
-import { isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
-import { auth } from "../../../firebase.js";
-
 import doctor from "./homepage/doctor.jpg";
 import "./App.css";
 import Calender from "./homepage/calender.jsx";
@@ -10,7 +7,7 @@ import MessageList from "./message/messageList.jsx";
 import SendMessageForm from "./message/sendMessageForm.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { db } from "../../../firebase.js";
-import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import MainSearch from "./search/MainSearch.jsx";
 
@@ -56,11 +53,11 @@ function DoctorApp() {
     navigate("/");
   };
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     navigate("/login");
-  //   }
-  // }, [user]);
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user]);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -84,84 +81,6 @@ function DoctorApp() {
 
     fetchUserInfo();
   }, [user]);
-
-  useEffect(() => {
-    const handleSignInWithEmailLink = async () => {
-      // Check if the URL is a sign-in with email link.
-      let email = window.localStorage.getItem("emailForSignIn");
-      let username;
-      let role;
-      let photoURL;
-      if (true) {
-        username = window.localStorage.getItem("username");
-        role = window.localStorage.getItem("role");
-        photoURL = window.localStorage.getItem("photoURL");
-      }
-      if (isSignInWithEmailLink(auth, window.location.href)) {
-        if (!email) {
-          email = window.prompt("Please provide your email for confirmation");
-        }
-
-        try {
-          const result = await signInWithEmailLink(
-            auth,
-            email,
-            window.location.href
-          );
-
-          const user = result.user;
-
-          if (true) {
-            const userDocRef = doc(db, "users", user.uid);
-            await setDoc(userDocRef, {
-              email: user.email,
-              username: username,
-              lastSignIn: serverTimestamp(),
-              role: role,
-              theme: "default",
-              photoURL: photoURL,
-            });
-
-            const roleDocRef = doc(db, role, user.uid);
-            await setDoc(roleDocRef, {
-              email: user.email,
-              username: username,
-              // role: role,
-              // theme: "default",
-              photoURL: photoURL,
-            });
-          }
-
-          window.localStorage.removeItem("emailForSignIn"); // Clear the email from localStorage
-
-          // Update state or context with the signed-in user
-          //console.log("User signed in:", result.user);
-
-          // Optionally redirect or update UI
-          //navigate("/"); // Modify as necessary
-        } catch (error) {
-          console.error("Error during sign in with email link:", error);
-          //navigate("/login");
-        }
-      } else {
-        const userDocRef = doc(db, "users", user.uid);
-
-        if (true) {
-          await setDoc(userDocRef, {
-            email: user.email,
-            username: username,
-            lastSignIn: serverTimestamp(),
-            role: role,
-            theme: "default",
-            photoURL: photoURL,
-          });
-        }
-      }
-    };
-
-    handleSignInWithEmailLink();
-  }, []);
-
   return (
     <div className="App">
       <header

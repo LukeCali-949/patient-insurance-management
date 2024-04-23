@@ -4,7 +4,7 @@ function AppointmentModal({isOpen, onClose, onConfirm, formData, doctor}){
     
     const handleConfirm = async () => {
         try { 
-            await axios.post('http://localhost:8000/send_appointment_email/', { formData, doctor });
+            await axios.post('https://patient-health-insurance-management-jrrw.onrender.com/send_appointment_email/', { formData, doctor });
             onClose();
         } catch (error) {
         console.error('Error:', error);
