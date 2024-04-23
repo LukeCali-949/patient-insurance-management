@@ -11,7 +11,7 @@ import { doc, setDoc } from "firebase/firestore";
 import { useAuth } from "../../../context/AuthContext";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
-const SignupForm = () => {
+const SignupForm = ({ setClickedRegister }) => {
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
   const { registerUser } = useAuth();
@@ -134,7 +134,10 @@ const SignupForm = () => {
           </h2>
           <p className="text-gray-600">
             Already have an account?{" "}
-            <a href="/login" className="text-[#747264] hover:underline">
+            <a
+              onClick={() => setClickedRegister(false)}
+              className="text-[#747264] hover:underline hover:cursor-pointer"
+            >
               Login
             </a>
           </p>

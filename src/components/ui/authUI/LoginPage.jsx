@@ -166,7 +166,7 @@ const LoginForm = () => {
       </div>
     </div>
   ) : (
-    <RegisterPage />
+    <RegisterPage setClickedRegister={setClickedRegister} />
   );
 };
 
